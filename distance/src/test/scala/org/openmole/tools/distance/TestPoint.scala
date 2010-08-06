@@ -43,20 +43,33 @@ class TestPoint {
     point.dropLabel(3)
     point.listLabel()*/
 
-    val m: Matrix = new Matrix(3,3,7)
+  /*  val m: Matrix = new Matrix(3,3,7)
    // println( "Voila::::"+m.isOk(1,0,2).toString)
     m.init
     //println(m.toInt1(2,1,1))
     /* println(m(2,1,2).getDistance)
     println("the distance of the first element is:" +m(0,1,2).getDistance)
     point= new BodyPoint()*/
-    m.setPoint(point,1,1,1)
+    m.setPoint(point,1,1,0)
     m.setPoint(new BodyPoint,1,1,2)
     m.setPoint(new BodyPoint,1,1,3)
+    m.setPoint(new BodyPoint,1,1,4)
+
     m.setPoint(new BodyPoint,0,0,3)
     m.setPoint(new BodyPoint,0,0,4)
     m.setPoint(new BodyPoint,0,0,6)
+
     m.setPoint(new BodyPoint,1,2,3)
+    m.setPoint(new BodyPoint,1,2,4)
+
+    m.setPoint(new BodyPoint,0,1,1)
+    m.setPoint(new BodyPoint,0,1,2)
+    m.setPoint(new BodyPoint,0,1,3)
+
+    m.setPoint(new BodyPoint,2,1,0)
+    m.setPoint(new BodyPoint,2,1,1)
+    m.setPoint(new BodyPoint,2,1,2)
+
     m.setPoint(new BodyPoint,2,2,0)
     m.setPoint(new BodyPoint,2,2,1)
     m.setPoint(new BodyPoint,2,2,2)
@@ -66,6 +79,7 @@ class TestPoint {
     m.setPoint(new BodyPoint,2,2,6)
     FirstAxis.passage1(m)
     FirstAxis.passage2(m)
+    AdditionalAxis.AdditionalAxisSup(m)
     println("point du corps (1 1 1) est de distance "+m(1,1,1).getDistance)
     println("point du corps (1 1 2) est de distance "+m(1,1,2).getDistance)
     println("point du corps (1 1 3) est de distance "+m(1,1,3).getDistance)
@@ -79,16 +93,33 @@ class TestPoint {
      println("point du corps (2 2 3) est de distance "+m(2,2,3).getDistance)
      println("point du corps (2 2 4) est de distance "+m(2,2,4).getDistance)
      println("point du corps (2 2 5) est de distance "+m(2,2,5).getDistance)
-     println("point du corps (2 2 6) est de distance "+m(2,2,6).getDistance)
+     println("point du corps (2 2 6) est de distance "+m(2,2,6).getDistance)*/
+    val mat: Matrix= new Matrix(3,7)
+    mat.init
 
-     var pile=new Stack[Int]
+    mat.setPoint(new BodyPoint,0,1)
+    mat.setPoint(new BodyPoint,0,6)
+    mat.setPoint(new BodyPoint,1,1)
+    mat.setPoint(new BodyPoint,1,2)
+    mat.setPoint(new BodyPoint,1,4)
+    mat.setPoint(new BodyPoint,1,5)
+    mat.setPoint(new BodyPoint,1,6)
+    mat.setPoint(new BodyPoint,2,5)
+    mat.setPoint(new BodyPoint,2,6)
+    FirstAxis.passage1(mat)
+    FirstAxis.passage2(mat)
+    println("point du corps (1 6) est de distance "+mat(1,6).getDistance)
+    AdditionalAxis.AdditionalAxisSup(mat)
+    println("point du corps (1 6) est de distance "+mat(1,6).getDistance)
+
+    /* var pile=new Stack[Int]
      pile=pile.push(1)
      pile=pile.push(2)
      pile=pile.push(3)
      pile=pile.push(4)
      println("tete: "+pile(0))
      println("tete: "+pile(1))
-     println("tete: "+pile(2))
+     println("tete: "+pile(2))*/
 
 
     /*val iter = new m.MatIterator()
