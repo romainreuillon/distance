@@ -26,7 +26,7 @@ object AdditionalAxis {
 //La fonction de calcul V pour la norme sup
   private def v(dist:Int,i:Int,l:Int)=max(dist,abs(i-l))
 // fonction de calcul de l'indice d'intersection des paraboles dans le cas de la norme euclidienne
-  private def intersectEuc(currentDist:Int,stackDist:Int,i:Int,l:Int)= 1+(l*l-i*i+stackDist-currentDist)/2*(l-i)
+  private def intersectEuc(currentDist:Int,stackDist:Int,i:Int,l:Int)= 1+(l*l-i*i+stackDist-currentDist)/(2*(l-i))
 //fonction de calcul de l'indice d'intersection des paraboles dans le cas de la norme sup
   private  def intersectSup(currentDist:Int,stackDist:Int,i:Int,l:Int)= if(l<=i)
                                                                 {
@@ -35,6 +35,25 @@ object AdditionalAxis {
                                                                 }
                                                                 else -1
 
+
+
+
+  private def carre(m:Matrix)= {
+    val iter= new m.MatIterator
+    while(!iter.isEnd){
+      while(!iter.isEnd){
+        val point=iter.getCurrent
+        if(point.getDistance>0){
+          point.setDistance(point.getDistance*point.getDistance)
+          m.setPoint(point, iter.getCoordinates:_*)
+        }
+        iter.incVarAxis(0)
+      }
+      iter.setFirstAxis(0)
+      iter.incInvarAxis(0)
+    }
+
+  }
 
 private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(Int,Int,Int,Int)=>Int )=
 {
@@ -78,7 +97,7 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
          {
           // val w= 1+(s.top*s.top-iter.getAxis(i)*iter.getAxis(i)+g.top-iter.getCurrent.getDistance)/2*(s.top-iter.getAxis(i))
                val w=  intersect(iter.getCurrent.getDistance,g.top,iter.getAxis(i),s.top)
-           if(w<m.axisRange(i)&& w>=0){
+           if(w<m.axisRange(i)/*&& w>=0*/){
                       s=s.push(iter.getAxis(i))
                       t=t.push(w)
                       g=g.push(iter.getCurrent.getDistance)
@@ -125,7 +144,10 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
 
 }
 
-def AdditionalAxisEuc(m:Matrix)=AdditionalAxisGeneral(m:Matrix, f,intersectEuc)
+def AdditionalAxisEuc(m:Matrix)= {
+                                  carre(m)
+                                  AdditionalAxisGeneral(m:Matrix, f,intersectEuc)
+                                }
 def AdditionalAxisSup(m:Matrix)=AdditionalAxisGeneral(m:Matrix, v,intersectSup)
 /*def AdditionalAxis(m:Matrix )=
 {

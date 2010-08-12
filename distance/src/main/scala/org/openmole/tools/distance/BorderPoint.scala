@@ -24,4 +24,5 @@ def dropLabel (lab : Int) : Unit = println("A border point has no label")
 def clearLabel : Unit = println("A border point has no label")
 def addLabel (lab:Int) : Unit =println("A border point does not support labels")
 def listLabel(): Unit =println("A border point has no label")
+override def toString : String= "(dist:0)"
 }

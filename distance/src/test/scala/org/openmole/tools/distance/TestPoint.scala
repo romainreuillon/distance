@@ -17,6 +17,10 @@
 
 package org.openmole.tools.distance
 import scala.collection.immutable.Stack
+import scala.io.Source
+import java.util.Scanner
+
+
 import org.junit._
 import Assert._
 
@@ -32,7 +36,27 @@ class TestPoint {
 
     @Test
     def example = {
-       var point: Point = new BodyPoint()
+
+      val arg =((for(arg <- Source.fromFile("/home/elbrini/dim").getLines) yield (arg.toInt)).toArray.reverse)
+      val m:Matrix=new Matrix (arg: _*)
+      println("done")
+       m.initBorder
+       println(m(0,0,0).getDistance)
+       for(arg<-Source.fromFile("/home/elbrini/coor").getLines) {
+        //val coor=(for(co<-(arg.split(' '))) yield (co.toInt)).toArray
+        m.setPoint(new BodyPoint, (for(co<-(arg.split(' '))) yield (co.toInt)).toArray:_*)
+                                                                                            }
+       
+       println("done2")
+      FirstAxis.passage1(m)
+      println(m(2,2,2).getDistance)
+    FirstAxis.passage2(m)
+    println(m(2,2,2).getDistance)
+
+    AdditionalAxis.AdditionalAxisEuc(m)
+    println(m(2,2,2).getDistance)
+    m(2,2,2).listLabel
+       //var point: Point = new BodyPoint()
 
     /*println("point appartient à la frontière??: "+point.isBorder.toString)
     point.setDistance(15)
@@ -43,7 +67,7 @@ class TestPoint {
     point.dropLabel(3)
     point.listLabel()*/
 
-  /*  val m: Matrix = new Matrix(3,3,7)
+ /*   val m: Matrix = new Matrix(3,3,7)
    // println( "Voila::::"+m.isOk(1,0,2).toString)
     m.init
     //println(m.toInt1(2,1,1))
@@ -79,12 +103,13 @@ class TestPoint {
     m.setPoint(new BodyPoint,2,2,6)
     FirstAxis.passage1(m)
     FirstAxis.passage2(m)
+    println("point du corps (2 2 3) est de distance "+m(2,2,3).getDistance)
     AdditionalAxis.AdditionalAxisSup(m)
     println("point du corps (1 1 1) est de distance "+m(1,1,1).getDistance)
     println("point du corps (1 1 2) est de distance "+m(1,1,2).getDistance)
     println("point du corps (1 1 3) est de distance "+m(1,1,3).getDistance)
     println("point du corps (0 0 3) est de distance "+m(0,0,3).getDistance)
-    println("point du corps (0 0 6) est de distance "+m(0,0,4).getDistance)
+    println("point du corps (0 0 4) est de distance "+m(0,0,4).getDistance)
     println("point du corps (0 0 5) est de distance "+m(0,0,6).getDistance)
 
      println("point du corps (2 2 0) est de distance "+m(2,2,0).getDistance)
@@ -94,7 +119,7 @@ class TestPoint {
      println("point du corps (2 2 4) est de distance "+m(2,2,4).getDistance)
      println("point du corps (2 2 5) est de distance "+m(2,2,5).getDistance)
      println("point du corps (2 2 6) est de distance "+m(2,2,6).getDistance)*/
-    val mat: Matrix= new Matrix(3,7)
+    /*val mat: Matrix= new Matrix(3,7)
     mat.init
 
     mat.setPoint(new BodyPoint,0,1)
@@ -110,7 +135,7 @@ class TestPoint {
     FirstAxis.passage2(mat)
     println("point du corps (1 6) est de distance "+mat(1,6).getDistance)
     AdditionalAxis.AdditionalAxisSup(mat)
-    println("point du corps (1 6) est de distance "+mat(1,6).getDistance)
+    println("point du corps (1 6) est de distance "+mat(1,6).getDistance)*/
 
     /* var pile=new Stack[Int]
      pile=pile.push(1)
@@ -188,7 +213,6 @@ class TestPoint {
         iter.incInvarAxis(2)
       }*/
 
-    
     }
    
     //println("Le premier axe est de valeur: "+iter.getAxis(0))
