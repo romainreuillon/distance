@@ -15,16 +15,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.openmole.tools.distance
-
+import scala.collection.mutable.LinkedList
 abstract class Point {
 
-def isBorder() : Boolean
-def getDistance : Int
-def setDistance(dist:Int) : Unit
-def dropLabel (lab : Int) : Unit
-def clearLabel : Unit
-def addLabel (lab:Int) : Unit
+def isBorder(): Boolean
+def getDistance: Int
+def getLabels: LinkedList[Int]
+def setDistance(dist:Int): Unit
+def dropLabel(lab:Int): Unit
+def clearLabel: Unit
+def addLabel(lab:Int): Unit
 def listLabel(): Unit
-
 
 }

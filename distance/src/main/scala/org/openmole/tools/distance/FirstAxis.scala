@@ -101,6 +101,7 @@ def passage2(m:Matrix) = {
                                                                            {
                                                                             if(cpt>0 && (point.getDistance>cpt || point.getDistance == (-1)))
                                                                             { point.setDistance(cpt)
+                                                                             point.clearLabel
                                                                              point.addLabel(label)
                                                                              m.setPoint(point, iter.getCoordinates:_*)
                                                                              cpt+=1

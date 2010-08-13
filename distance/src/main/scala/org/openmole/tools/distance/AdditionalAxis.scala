@@ -91,7 +91,8 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
                       s=s.push(iter.getAxis(i))
                       t=t.push(0)
                       g=g.push(iter.getCurrent.getDistance)
-                      label=label.push(iter.getLabel)
+                      if (iter.getCurrent.isBorder)  label=label.push(iter.getLabel)
+                      else label=label.push(iter.getCurrent.getLabels(0))
          }
          else
          {
@@ -101,7 +102,8 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
                       s=s.push(iter.getAxis(i))
                       t=t.push(w)
                       g=g.push(iter.getCurrent.getDistance)
-                      label=label.push(iter.getLabel)
+                      if (iter.getCurrent.isBorder)  label=label.push(iter.getLabel)
+                      else label=label.push(iter.getCurrent.getLabels(0))
 
                                }
 

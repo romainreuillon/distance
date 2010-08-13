@@ -44,18 +44,31 @@ class TestPoint {
        println(m(0,0,0).getDistance)
        for(arg<-Source.fromFile("/home/elbrini/coor").getLines) {
         //val coor=(for(co<-(arg.split(' '))) yield (co.toInt)).toArray
-        m.setPoint(new BodyPoint, (for(co<-(arg.split(' '))) yield (co.toInt)).toArray:_*)
+        m.setPoint(new BodyPoint, (for(co<-(arg.split('\t'))) yield (co.toInt)).toArray:_*)
                                                                                             }
        
        println("done2")
       FirstAxis.passage1(m)
-      println(m(2,2,2).getDistance)
+     // println(m(6,5,6).getDistance)
     FirstAxis.passage2(m)
-    println(m(2,2,2).getDistance)
+   // println(m(6,5,6).getDistance)
 
     AdditionalAxis.AdditionalAxisEuc(m)
-    println(m(2,2,2).getDistance)
-    m(2,2,2).listLabel
+   // println(m(6,5,6).getDistance)
+   // m(6,5,6).listLabel
+    val iter= new m.MatIterator
+        while(!iter.isEnd){
+      while(!iter.isEnd){
+        val point=iter.getCurrent
+        if(!point.isBorder){
+          println( iter.getCoordinates.mkString("(", ",", ")") +" "+point.getDistance+" "+iter.getLabelCoordinates.mkString("(", ",", ")"))
+          
+        }
+        iter.incVarAxis(0)
+      }
+      iter.setFirstAxis(0)
+      iter.incInvarAxis(0)
+    }
        //var point: Point = new BodyPoint()
 
     /*println("point appartient à la frontière??: "+point.isBorder.toString)

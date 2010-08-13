@@ -15,14 +15,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.openmole.tools.distance
+import scala.collection.mutable.LinkedList.empty
 class BorderPoint extends Point{
-  //Attributes
-def isBorder() : Boolean= true
+
+def isBorder(): Boolean= true
 def getDistance = 0
-def setDistance(dist:Int) : Unit =println("Cannot set distance for a border point")
-def dropLabel (lab : Int) : Unit = println("A border point has no label")
-def clearLabel : Unit = println("A border point has no label")
-def addLabel (lab:Int) : Unit =println("A border point does not support labels")
+def getLabels = empty
+def setDistance(dist: Int): Unit =println("Cannot set distance for a border point")
+def dropLabel(lab: Int): Unit = println("A border point has no label")
+def clearLabel: Unit = println("A border point has no label")
+def addLabel (lab: Int): Unit = println("A border point does not support labels")
 def listLabel(): Unit =println("A border point has no label")
-override def toString : String= "(dist:0)"
+//override def toString : String= "(dist:0)"
 }

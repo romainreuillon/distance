@@ -30,10 +30,7 @@ class Matrix(dimension: Int*) {
 //private val dim : Array[Int]= dimension.toArray.reverse
 
   //Private methods
-  private def isOk (coor :Int*) : Boolean =  coor.length==dim.length && List.forall2 (coor.toList,dim.toList) (_<_)
-  //private def isOk (coor :Int*) : Boolean =  coor.length==dim.length && List.forall2 (coor.toList,dim.toList.reverse) (_<_)
-  //def toInt (coor: Int*): Int =  (for ((s,t)<- coor zip dim) yield (s*t)).sum
-  //def toInt1 (coor: Int*): Int = (for ((x,y) <- coor zip (for ((s,t)<- (0 until dim.length).reverse zip dim) yield pow(t.toDouble,s.toDouble))) yield (x*y)).sum.toInt
+  private def isOk (coor: Int*) : Boolean =  coor.length==dim.length && List.forall2 (coor.toList,dim.toList) (_<_)
   private def toIndex (coor :Int*): Int = (for ((arg,i) <- coor.init zip (0 until coor.length-1)) yield arg* dim.slice(i+1, dim.length).product).sum + coor.last
 // private def toIndex (coor :Int*): Int = (for ((arg,i) <- coor.init.reverse zip (1 until coor.length-1)) yield arg* dim.slice(0, i).product).sum + coor.last
 
@@ -41,33 +38,35 @@ class Matrix(dimension: Int*) {
 
 
   //override def update (coor: Int* , point:Point)= if (isOk(coor)) matrix(1)=point
-  def init(op:Unit=>Point) : Unit = for(i<- 0 until mat.length) {mat(i)= new BorderPoint}
-  def initBorder: Unit = for(i<- 0 until mat.length) mat(i)= new BorderPoint
-  def initBody: Unit= for(i<- 0 until mat.length) mat(i)= new BodyPoint
+  //def init(op:Unit=>Point): Unit = for(i<- 0 until mat.length) mat(i) = new BorderPoint
 
+  def initBorder: Unit = for(i<- 0 until mat.length) mat(i) = new BorderPoint
 
-  def apply (coor: Int*) = {
+  def initBody: Unit = for(i<- 0 until mat.length) mat(i) = new BodyPoint
+
+  def apply(coor: Int*) = {
     require(isOk(coor: _*))
     mat(toIndex(coor:_*))
   }
-  def setPoint (point: Point,coor:Int*) = {
+
+  def setPoint (point: Point,coor: Int*) = {
     require(isOk(coor: _*))
     mat(toIndex(coor:_*)) = point
   }
-  def nbDim=dim.length
-  def axisRange(axis:Int)= dim.reverse(axis)
+
+  def nbDim = dim.length
+
+  def axisRange(axis: Int) = dim.reverse(axis)
 
 
   class MatIterator () {
     private var index :Int = 0
-    private var end :Boolean=false
-    //var rend :Boolean=false
-
-    //private val matrice : Matrix = m
+    private var end :Boolean = false
+    
 
 
     //Private methods
-    private def axisIsOk(axis:Int)= axis>=0 && axis<dim.length
+    private def axisIsOk(axis: Int) = axis >= 0 && axis < dim.length
 
     def getAxis(axis: Int) = {
       require(axisIsOk(axis))
@@ -171,6 +170,9 @@ class Matrix(dimension: Int*) {
     def getCurrent:Point=mat(index)
     def getCoordinates=(for(arg <-  0 to dim.length-1) yield getAxis(arg)).reverse
     def getLabel=index
+    def getLabelCoordinates={val rev= dim.reverse
+                             (for(arg <-  0 to dim.length-1) yield ((getCurrent.getLabels(0)/rev.slice(0, arg).product)%rev(arg))).reverse
+}
     override def  toString= "("+(getCoordinates mkString ",") +")"
   }
 }
