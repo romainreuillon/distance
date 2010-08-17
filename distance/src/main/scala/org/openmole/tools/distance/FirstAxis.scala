@@ -17,100 +17,73 @@
 
 package org.openmole.tools.distance
 
-object FirstAxis {
+class FirstAxis extends Computable{
 
-/*private def matcher(m:Matrix,restart:(Int)=> Unit, progress:(Int)=> Unit)={
-                            val iter = new m.MatIterator()
-                           // var point:Point=new BorderPoint
-                            var cpt=0
-                            var label = -1
-                            iter.setFirst
-                            restart(0)
-                            while(!iter.isEnd()){
-                                                  cpt=0
-                                                  while(!iter.isEnd()) {
-                                                                          val point=iter.getCurrent
-                                                                          if(point.isBorder)
-                                                                           {
-                                                                             label=iter.getLabel
-                                                                             cpt=1
-                                                                           }
-                                                                           else
-                                                                           {
-                                                                             if(cpt>0)
-                                                                             point.setDistance(cpt)
-                                                                             point.addLabel(label)
-                                                                             m.setPoint(point, iter.getCoordinates:_*)
-                                                                             cpt+=1
-                                                                           }
-                                                                          progress(0)
-                                                                       }
-                                                  restart(0)
-                                                  iter.incInvarAxis(0)
-                        }
+def passage1(m: Matrix) = {
+  val iter = new m.MatIterator()
+  var point: Point = new BorderPoint
+  var cpt = 0
+  var label = -1
+  iter.setFirst
+  while(!iter.isEnd()) {
+    cpt=0
+    while(!iter.isEnd()) {
+      point=iter.getCurrent
+      if(point.isBorder) {
+        label = iter.getLabel
+        cpt = 1
+      }
+      else {
+        if(cpt > 0) {
+          point.setDistance(cpt)
+          point.addLabel(label)
+          m.setPoint(point, iter.getCoordinates:_*)
+          cpt += 1
+        }
+      }
+      iter.incVarAxis(0)
+    }
+    iter.setFirstAxis(0)
+    iter.incInvarAxis(0)
+  }
 
-                          }*/
-def passage1(m:Matrix ) = {
-                            val iter = new m.MatIterator()
-                           // var point:Point=new BorderPoint
-                            var cpt=0
-                            var label = -1
-                            iter.setFirst
-                            while(!iter.isEnd()){
-                                                  cpt=0
-                                                  while(!iter.isEnd()) {
-                                                                          val point=iter.getCurrent
-                                                                          if(point.isBorder)
-                                                                           {
-                                                                             label=iter.getLabel
-                                                                             cpt=1
-                                                                           }
-                                                                           else
-                                                                           {
-                                                                             if(cpt>0)
-                                                                             {
-                                                                             point.setDistance(cpt)
-                                                                             point.addLabel(label)
-                                                                             m.setPoint(point, iter.getCoordinates:_*)
-                                                                             cpt+=1
-                                                                             }
-                                                                           }
-                                                                          iter.incVarAxis(0)
-                                                                       }
-                                                  iter.setFirstAxis(0)
-                                                  iter.incInvarAxis(0)
-                        }
-
-                          }
-def passage2(m:Matrix) = {
-                            val iter = new m.MatIterator()
-                           // var point:Point=new BorderPoint
-                            var cpt=0
-                            var label = -1
-                            iter.setLast
-                            while(!iter.isEnd()){
-                                                  cpt=0
-                                                  while(!iter.isEnd()) {
-                                                                          val point=iter.getCurrent
-                                                                          if(point.isBorder)
-                                                                           {
-                                                                             label=iter.getLabel
-                                                                             cpt=1
-                                                                           }
-                                                                           else
-                                                                           {
-                                                                            if(cpt>0 && (point.getDistance>cpt || point.getDistance == (-1)))
-                                                                            { point.setDistance(cpt)
-                                                                             point.clearLabel
-                                                                             point.addLabel(label)
-                                                                             m.setPoint(point, iter.getCoordinates:_*)
-                                                                             cpt+=1
-                                                                            }
-                                                                           }
-                                                                          iter.decVarAxis(0)
-                                                                       }
-                                                  iter.setLastAxis(0)
-                                                  iter.decInvarAxis(0)
-                        }
 }
+
+  
+def passage2(m: Matrix) = {
+  val iter = new m.MatIterator()
+  var cpt = 0
+  var label = -1
+  var point: Point = new BorderPoint
+  iter.setLast
+  while(!iter.isEnd()) {
+    cpt = 0
+    while(!iter.isEnd()) {
+       point=iter.getCurrent
+       if(point.isBorder) {
+         label=iter.getLabel
+         cpt=1
+       }
+       else {
+         if(cpt>0 && (point.getDistance>cpt || point.getDistance == (-1))) {
+           point.setDistance(cpt)
+           //point.clearLabel
+           point.addLabel(label)
+           m.setPoint(point, iter.getCoordinates:_*)
+           cpt += 1
+         }
+       }
+       iter.decVarAxis(0)
+     }
+     iter.setLastAxis(0)
+     iter.decInvarAxis(0)
+   }
+   
+ }
+
+  def computeDistance(m:Matrix) = {
+    passage1(m)
+    passage2(m)
+  }
+
 }

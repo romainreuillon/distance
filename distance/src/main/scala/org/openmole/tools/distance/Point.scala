@@ -20,11 +20,12 @@ abstract class Point {
 
 def isBorder(): Boolean
 def getDistance: Int
-def getLabels: LinkedList[Int]
+//def getLabels: LinkedList[Int]
+def getLabel:Int
 def setDistance(dist:Int): Unit
-def dropLabel(lab:Int): Unit
-def clearLabel: Unit
+//def dropLabel(lab:Int): Unit
+//def clearLabel: Unit
 def addLabel(lab:Int): Unit
-def listLabel(): Unit
+//def listLabel(): Unit
 
 }

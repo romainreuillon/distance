@@ -20,11 +20,12 @@ class BorderPoint extends Point{
 
 def isBorder(): Boolean= true
 def getDistance = 0
-def getLabels = empty
+def getLabel = -1
+//def getLabels = empty
 def setDistance(dist: Int): Unit =println("Cannot set distance for a border point")
-def dropLabel(lab: Int): Unit = println("A border point has no label")
-def clearLabel: Unit = println("A border point has no label")
+//def dropLabel(lab: Int): Unit = println("A border point has no label")
+//def clearLabel: Unit = println("A border point has no label")
 def addLabel (lab: Int): Unit = println("A border point does not support labels")
-def listLabel(): Unit =println("A border point has no label")
+//def listLabel(): Unit =println("A border point has no label")
 //override def toString : String= "(dist:0)"
 }
