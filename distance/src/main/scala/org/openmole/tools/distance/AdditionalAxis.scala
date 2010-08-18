@@ -107,8 +107,10 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
 }
 
 def computeDistance(m: Matrix) = {
-                                  norm.preOperations(m)
-                                  AdditionalAxisGeneral(m, norm.distance,norm.intersectIndex)
-                                }
+  norm.preOperations(m)
+  AdditionalAxisGeneral(m, norm.distance,norm.intersectIndex)
+  norm.postOperations(m)
+
+}
 
 }

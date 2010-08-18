@@ -58,7 +58,7 @@ class TestPoint {
         while(!iter.isEnd) {
          coor=iter.getCoordinates
           //val distance = sqrt((for ((x,y) <- (o zip coor)) yield ((x-y)*(x-y))).sum)
-          if (sqrt((for ((x,y) <- (o zip coor)) yield ((x-y)*(x-y))).sum) < r) m.setPoint(new BodyPoint, coor:_*)
+          if ((for ((x,y) <- (o zip coor)) yield ((x-y)*(x-y))).sum < r*r) m.setPoint(new BodyPoint, coor:_*)
           else {
             m.setPoint(new BorderPoint, coor:_*)
             i += 1
@@ -75,7 +75,8 @@ class TestPoint {
     // println(m(6,5,6).getDistance)
     //FirstAxis.passage2(m)
     // println(m(6,5,6).getDistance)
-    val m = new Matrix(10,10,10,10,10,10,10,3)
+    //val m = new Matrix(10,10,10,10,10,10,10,3)
+    val m = new Matrix(11,11,11,11,11,11,11)
     /* val o  = List(4,3,4,5,6,4,2,2).toSeq
      val iter= new m.MatIterator
      while(!iter.isEnd) {
@@ -93,15 +94,15 @@ class TestPoint {
 
     println("Generating the sphere...")
 
-    fillSphere(m,5.2,1,5,4,2,4,3,4,2)
-
+    //fillSphere(m,5.2,1,5,4,2,4,3,4,2)
+    fillSphere(m,5.2,1,5,4,2,4,3,4)
     println("Sphere generated.")
-    val norm=new NormEuc
+    val norm = new NormEuc
     // AdditionalAxis.AdditionalAxis(m,norm)
     // println(m(6,5,6).getDistance)
     // m(6,5,6).listLabel
 
-    println("Compute the distance map")
+    println("Computing the distance map...")
     val compute= new AllAxis(norm)
     compute.computeDistance(m)
     compute.showResults(m)

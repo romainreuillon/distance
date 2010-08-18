@@ -47,7 +47,7 @@ class Matrix(dimension: Int*) {
 
   def axisRange(axis: Int) = dim(axis)
 
-  def labelToCoordinates(label: Int) = (for(arg <-  0 to dim.length-1) yield ((label/dim.slice(0, arg).product)%dim(arg))).reverse
+  def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label/dim.slice(0, arg).product)%dim(arg)))
 
 
   class MatIterator () {
@@ -106,11 +106,11 @@ class Matrix(dimension: Int*) {
           index=newIndex
         }
         else {
-          index -= 1
-          end = true
+         index -= 1
+         end = true
         }
-     }
-   }
+      }
+    }
     
     def decInvarAxis(axis: Int) = {
       index -= 1
@@ -123,8 +123,8 @@ class Matrix(dimension: Int*) {
           index -= 1
           end = true
         }
-     }
-   }
+      }
+    }
 
     //def isLast(): Boolean= index== mat.length-1
     
@@ -149,7 +149,7 @@ class Matrix(dimension: Int*) {
     
     def getCurrent: Point = mat(index)
 
-    def getCoordinates=(for(arg <-  0 to dim.length-1) yield getAxis(arg)).reverse
+    def getCoordinates=(for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg))
 
     def getLabel=index
     

@@ -36,7 +36,7 @@ override def setDistance(dist:Int): Unit = distance = dist
  //def dropLabel(lab: Int) = if (label.nonEmpty) label = label.filterNot(_ == lab)
  //def clearLabel = label = new LinkedList   //label.drop(label.length-1)
 // def addLabel(lab: Int) = if(!label.exists(_ == lab)) label = label.:+(lab)
-def addLabel(lab: Int) = label=lab
+def addLabel(lab: Int) = label = lab
 // def listLabel(): Unit =  println(label.mkString(", "))
  def isBorder(): Boolean = false
  //override def toString : String= "(dist: "+distance+"label: "+label.mkString(", ")+")"
