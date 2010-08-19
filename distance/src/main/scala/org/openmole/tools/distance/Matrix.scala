@@ -21,17 +21,32 @@ class Matrix(dimension: Int*) {
 
   //Attributes
   private val mat : Array[Point] = new Array(dimension.product)
-  private val dim : Array[Int] = dimension.toArray.reverse
+  val dim : Array[Int] = dimension.toArray.reverse
+   val weights: Array[Int] = initialize()
+
+  private def initialize() = {
+    var cumul = 1
+    val tmp: Array[Int] = dim.clone
+    for(i <- 0 until dim.length) {
+
+      tmp(i) = cumul
+      cumul = cumul * dim(i)
+
+    }
+    tmp
+  }
 
   //Private methods
   private def isOk (coor: Int*) : Boolean =  coor.length==dim.length && List.forall2 (coor.toList.reverse,dim.toList) (_<_)
-  private def toIndex (coor: Int*): Int = (for ((arg,i) <- coor.reverse zip (0 until coor.length)) yield arg* dim.slice(0,i).product).sum
-
+  //private def toIndex (coor: Int*): Int = (for ((arg, i) <- coor zip (coor.length-1 to (0,-1))) yield arg * dim.slice(0, i).product).sum
+ // private def toIndex (coor: Int*): Int = (for ((x,y) <- coor.reverse zip weights) yield x * y).sum
+  private def toIndex (coor: Int*): Int = (for ( i <- (coor.length-1) to (0,-1)) yield coor(i) * weights(i)).sum
+  
   //Methods
 
-  def initBorder: Unit = for(i<- 0 until mat.length) mat(i) = new BorderPoint
+  def initBorder: Unit = for(i <- 0 until mat.length) mat(i) = new BorderPoint
 
-  def initBody: Unit = for(i<- 0 until mat.length) mat(i) = new BodyPoint
+  def initBody: Unit = for(i <- 0 until mat.length) mat(i) = new BodyPoint
 
   def apply(coor: Int*) = {
    // require(isOk(coor: _*))
@@ -47,7 +62,8 @@ class Matrix(dimension: Int*) {
 
   def axisRange(axis: Int) = dim(axis)
 
-  def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label/dim.slice(0, arg).product)%dim(arg)))
+  //def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label/dim.slice(0, arg).product)%dim(arg)))
+  def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label/weights(arg))%dim(arg)))
 
 
   class MatIterator () {
@@ -62,8 +78,9 @@ class Matrix(dimension: Int*) {
     //Methods
     def getAxis(axis: Int) = {
       //require(axisIsOk(axis))
-      (index/dim.slice(0, axis).product)%dim(axis)
+     (index / weights(axis)) % dim(axis)
     }
+    
      
     def setFirst = index = 0
 
@@ -71,7 +88,7 @@ class Matrix(dimension: Int*) {
 
     def setFirstAxis(axis: Int) = {
       //require(axisIsOk(axis))
-      index-= dim.slice(0, axis).product*getAxis(axis)
+      index -= weights(axis)* getAxis(axis)
     }
 
     
@@ -81,19 +98,19 @@ class Matrix(dimension: Int*) {
       //if(axis==0) {
         //index += dim(0) - getAxis(0) - 1
       //}
-      /*else*/ index += dim.slice(0, axis).product*(dim(axis) -getAxis(axis) - 1)
+      /*else*/ index += weights(axis)*(dim(axis) -getAxis(axis) - 1)
     }
 
     def incVarAxis(axis: Int) = {
       //require(axisIsOk(axis))
-      if(!isAxisLast(axis)) index+=dim.slice(0, axis).product
+      if(!isAxisLast(axis)) index += weights(axis)
       else end = true
                                
     }
 
     def decVarAxis(axis: Int) = {
       //require(axisIsOk(axis))
-      if(!isAxisFirst(axis)) index -= dim.slice(0, axis).product
+      if(!isAxisFirst(axis)) index -= weights(axis)
       else end = true
     }
 
@@ -101,7 +118,7 @@ class Matrix(dimension: Int*) {
     def incInvarAxis(axis: Int) = {
       index += 1
       if(getAxis(axis) != 0) {
-        val newIndex = index + dim.slice(0,axis).product * (dim(axis) - 1)
+        val newIndex = index + weights(axis) * (dim(axis) - 1)
         if(newIndex < mat.length) {
           index=newIndex
         }
@@ -114,8 +131,9 @@ class Matrix(dimension: Int*) {
     
     def decInvarAxis(axis: Int) = {
       index -= 1
-      if(getAxis(axis) != dim(axis) - 1) {
-        val newIndex = index - dim.slice(0, axis).product * (dim(axis) - 1)
+      val lastIndex = dim(axis)-1
+      if(getAxis(axis) != lastIndex) {
+        val newIndex = index - weights(axis) * (lastIndex)
         if(newIndex > 0) {
           index = newIndex
         }
@@ -149,11 +167,22 @@ class Matrix(dimension: Int*) {
     
     def getCurrent: Point = mat(index)
 
-    def getCoordinates=(for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg))
+    //def getCoordinates = for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg)
+    /*def getCoordinates = {
+      var tmp = dim.product
+     // (index / dim.slice(0, axis).product) % dim(axis)
+     def cpt (x:Int) = {tmp/=x
+                    (index/tmp) %x}
+      dim.map(cpt _)
+
+
+    }*/
+     def getCoordinates = for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg)
+
 
     def getLabel=index
     
-    override def  toString= "(" + (getCoordinates mkString ",") + ")"
+    //override def  toString= "(" + (getCoordinates mkString ",") + ")"
 
   }
 

@@ -70,13 +70,38 @@ class TestPoint {
       }
       println(i)
     }
+
+    def fillCarre(m: Matrix) {
+      var i = 0
+
+      //require(m.nbDim==o.length)
+      val iter= new m.MatIterator
+      var coor=iter.getCoordinates
+      while(!iter.isEnd) {
+
+        for(j <- 0 until m.axisRange(0)/2) {
+          coor=iter.getCoordinates
+          m.setPoint(new BodyPoint, coor:_*)
+          iter.incVarAxis(0)
+          i += 1
+        }
+        while(!iter.isEnd) {
+          coor=iter.getCoordinates
+          m.setPoint(new BorderPoint, coor:_*)
+          iter.incVarAxis(0)
+         }
+        iter.setFirstAxis(0)
+        iter.incInvarAxis(0)
+      }
+      println(i)
+    }
       
     //FirstAxis.passage1(m)
     // println(m(6,5,6).getDistance)
     //FirstAxis.passage2(m)
     // println(m(6,5,6).getDistance)
     //val m = new Matrix(10,10,10,10,10,10,10,3)
-    val m = new Matrix(11,11,11,11,11,11,11)
+    val m = new Matrix(10,10,10,10,10,10)
     /* val o  = List(4,3,4,5,6,4,2,2).toSeq
      val iter= new m.MatIterator
      while(!iter.isEnd) {
@@ -92,20 +117,25 @@ class TestPoint {
      }*/
 
 
-    println("Generating the sphere...")
+    
+    //val m :Matrix= new Matrix(10,10,10,10,10,10)
+    println(m.dim.mkString(","))
+    println(m.weights.mkString(","))
 
-    //fillSphere(m,5.2,1,5,4,2,4,3,4,2)
-    fillSphere(m,5.2,1,5,4,2,4,3,4)
-    println("Sphere generated.")
+    println("Generating the sphere...")
+    val start : Long = System.currentTimeMillis
+    fillCarre(m)
+    //val start : Long = System.currentTimeMillis
+    println("Square generated.")
     val norm = new NormEuc
-    // AdditionalAxis.AdditionalAxis(m,norm)
-    // println(m(6,5,6).getDistance)
-    // m(6,5,6).listLabel
+
 
     println("Computing the distance map...")
     val compute= new AllAxis(norm)
     compute.computeDistance(m)
-    compute.showResults(m)
+    val end : Long = System.currentTimeMillis
+    println("Computed in: " + (end - start)/1000)
+    //compute.showResults(m)
     //var point: Point = new BodyPoint()
 
     /*println("point appartient à la frontière??: "+point.isBorder.toString)

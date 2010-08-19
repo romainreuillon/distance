@@ -44,55 +44,61 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
 
     while(!iter.isEnd()) {
        while(!iter.isEnd()) {
-        if(iter.getCurrent.getDistance >= 0) {
-          while(!s.isEmpty && (norme(g.top,s.top,t.top) > norme(iter.getCurrent.getDistance,iter.getAxis(i),t.top))) {
-           s = s.pop
-           t = t.pop
-           g = g.pop
-           label = label.pop
+
+         val current = iter.getCurrent
+         val axisValue = iter.getAxis(i)
+         val distance = current.getDistance
+
+          if(iter.getCurrent.getDistance >= 0) {
+            while(!s.isEmpty && (norme(g.top,s.top,t.top) > norme(distance,axisValue,t.top))) {
+              s = s.pop
+              t = t.pop
+              g = g.pop
+              label = label.pop
+            }
+            if(s.isEmpty) {
+              s = s.push(axisValue)
+              t = t.push(0)
+              g = g.push(distance)
+              if (current.isBorder)  label=label.push(iter.getLabel)
+              //else label=label.push(iter.getCurrent.getLabels(0))
+              else label=label.push(current.getLabel)
+            }
+            else {
+
+              val w =  intersect(distance,g.top,axisValue,s.top)
+              if(w < m.axisRange(i)) {
+                s = s.push(axisValue)
+                t = t.push(w)
+                g = g.push(distance)
+                if (current.isBorder)  label=label.push(iter.getLabel)
+                //else label=label.push(iter.getCurrent.getLabels(0))
+                else label=label.push(current.getLabel)
+              }
+
+            }
+
           }
-          if(s.isEmpty){
-           s = s.push(iter.getAxis(i))
-           t = t.push(0)
-           g = g.push(iter.getCurrent.getDistance)
-           if (iter.getCurrent.isBorder)  label=label.push(iter.getLabel)
-           //else label=label.push(iter.getCurrent.getLabels(0))
-           else label=label.push(iter.getCurrent.getLabel)
-          }
-         else {
-
-           val w =  intersect(iter.getCurrent.getDistance,g.top,iter.getAxis(i),s.top)
-           if(w < m.axisRange(i)) {
-                      s = s.push(iter.getAxis(i))
-                      t = t.push(w)
-                      g = g.push(iter.getCurrent.getDistance)
-                      if (iter.getCurrent.isBorder)  label=label.push(iter.getLabel)
-                      //else label=label.push(iter.getCurrent.getLabels(0))
-                      else label=label.push(iter.getCurrent.getLabel)
-           }
-
-         }
-
+          iter.incVarAxis(i)
         }
-         iter.incVarAxis(i)
-     }
 
      if(!s.isEmpty) {
       // var point: Point = new BorderPoint
       while(!iter.isEnd()) {
+         val axisValue = iter.getAxis(i)
          val point=iter.getCurrent
          if(!point.isBorder) {
-         point.setDistance(norme(g.top, iter.getAxis(i), s.top))
-         //point.clearLabel
-         point.addLabel(label.top)
-         m.setPoint(point, iter.getCoordinates:_*)
+          point.setDistance(norme(g.top, axisValue, s.top))
+          //point.clearLabel
+          point.addLabel(label.top)
+          m.setPoint(point, iter.getCoordinates:_*)
          }
 
-         if(t.top==iter.getAxis(i)) {
-          s = s.pop
-          t = t.pop
-          g = g.pop
-          label = label.pop
+         if(t.top == axisValue) {
+           s = s.pop
+           t = t.pop
+           g = g.pop
+           label = label.pop
          }
         iter.decVarAxis(i)
       }

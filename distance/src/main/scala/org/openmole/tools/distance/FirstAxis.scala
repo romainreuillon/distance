@@ -65,7 +65,8 @@ def passage2(m: Matrix) = {
          cpt=1
        }
        else {
-         if(cpt>0 && (point.getDistance>cpt || point.getDistance == (-1))) {
+         val distance = point.getDistance
+         if(cpt>0 && (distance>cpt || distance == -1)) {
            point.setDistance(cpt)
            //point.clearLabel
            point.addLabel(label)
