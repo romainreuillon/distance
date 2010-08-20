@@ -76,24 +76,31 @@ class TestPoint {
 
       //require(m.nbDim==o.length)
       val iter= new m.MatIterator
-      var coor=iter.getCoordinates
+      val iter1=new m.MatIterator
+      iter1.setLast
+      //var coor=iter.getCoordinates
       while(!iter.isEnd) {
 
+
         for(j <- 0 until m.axisRange(0)/2) {
-          coor=iter.getCoordinates
-          m.setPoint(new BodyPoint, coor:_*)
+          //coor=iter.getCoordinates
+          m.setPoint(new BodyPoint, (iter.getCoordinates):_*)
+          m.setPoint(new BorderPoint, (iter1.getCoordinates):_*)
           iter.incVarAxis(0)
-          i += 1
+          iter1.decVarAxis(0)
+         // i += 1
         }
-        while(!iter.isEnd) {
-          coor=iter.getCoordinates
-          m.setPoint(new BorderPoint, coor:_*)
+       /* while(!iter.isEnd) {
+          //coor=iter.getCoordinates
+          
           iter.incVarAxis(0)
-         }
+         }*/
         iter.setFirstAxis(0)
+        iter1.setLastAxis(0)
+        iter1.decInvarAxis(0)
         iter.incInvarAxis(0)
       }
-      println(i)
+     // println(i)
     }
       
     //FirstAxis.passage1(m)
@@ -101,7 +108,7 @@ class TestPoint {
     //FirstAxis.passage2(m)
     // println(m(6,5,6).getDistance)
     //val m = new Matrix(10,10,10,10,10,10,10,3)
-    val m = new Matrix(10,10,10,10,10,10)
+    val m = new Matrix(10,10,10,10,10,10,10,10)
     /* val o  = List(4,3,4,5,6,4,2,2).toSeq
      val iter= new m.MatIterator
      while(!iter.isEnd) {
@@ -123,10 +130,11 @@ class TestPoint {
     println(m.weights.mkString(","))
 
     println("Generating the sphere...")
-    val start : Long = System.currentTimeMillis
+   val start : Long = System.currentTimeMillis
     fillCarre(m)
     //val start : Long = System.currentTimeMillis
     println("Square generated.")
+     //val start : Long = System.currentTimeMillis
     val norm = new NormEuc
 
 

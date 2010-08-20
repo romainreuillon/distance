@@ -107,6 +107,6 @@ object Main {
     compute.computeDistance(m)
     val end : Long = System.currentTimeMillis
     println("Computed in: " + (end - start)/1000)
-  }
+  }*/
 
-}*/
+/*}*/
