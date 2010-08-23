@@ -72,20 +72,38 @@ class TestPoint {
     }
 
     def fillCarre(m: Matrix) {
-      var i = 0
+     // var i = 0
 
       //require(m.nbDim==o.length)
       val iter= new m.MatIterator
       val iter1=new m.MatIterator
       iter1.setLast
       //var coor=iter.getCoordinates
+     // m(0,0,0,0,0,0) = new BorderPoint
+     
       while(!iter.isEnd) {
 
-
+   
         for(j <- 0 until m.axisRange(0)/2) {
+         
           //coor=iter.getCoordinates
           m.setPoint(new BodyPoint, (iter.getCoordinates):_*)
+         // println(iter.getCoordinates.toString)
+          //println(iter1.index)
+          //println(iter1.getAxis(0))
+          // println(iter1.getAxis(1))
+          // println(iter1.getAxis(2))
+         //  println(iter1.getAxis(3))
+          // println(iter1.getAxis(4))
+          // println(iter1.getAxis(5))
+          // println(iter1.getAxis(6))
+          // println((for(arg <- m.dim.length-1 to (0,-1)) yield iter1.getAxis(arg)).toString)
+
+
           m.setPoint(new BorderPoint, (iter1.getCoordinates):_*)
+          
+          //println(iter1.getCoordinates.toString)
+          // println("Done")
           iter.incVarAxis(0)
           iter1.decVarAxis(0)
          // i += 1
@@ -108,7 +126,7 @@ class TestPoint {
     //FirstAxis.passage2(m)
     // println(m(6,5,6).getDistance)
     //val m = new Matrix(10,10,10,10,10,10,10,3)
-    val m = new Matrix(10,10,10,10,10,10,10,10)
+    val m = new Matrix(10,10,10,10,10,10,30)
     /* val o  = List(4,3,4,5,6,4,2,2).toSeq
      val iter= new m.MatIterator
      while(!iter.isEnd) {
@@ -126,15 +144,15 @@ class TestPoint {
 
     
     //val m :Matrix= new Matrix(10,10,10,10,10,10)
-    println(m.dim.mkString(","))
-    println(m.weights.mkString(","))
+    //println(m.dim.mkString(","))
+   // println(m.weights.mkString(","))
 
     println("Generating the sphere...")
-   val start : Long = System.currentTimeMillis
+   //val start : Long = System.currentTimeMillis
     fillCarre(m)
     //val start : Long = System.currentTimeMillis
     println("Square generated.")
-     //val start : Long = System.currentTimeMillis
+     val start : Long = System.currentTimeMillis
     val norm = new NormEuc
 
 

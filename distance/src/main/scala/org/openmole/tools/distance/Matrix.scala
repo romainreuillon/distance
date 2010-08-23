@@ -21,9 +21,10 @@ class Matrix(dimension: Int*) {
 
   //Attributes
   private val mat : Array[Point] = new Array(dimension.product)
-  val dim : Array[Int] = dimension.toArray.reverse
-   val weights: Array[Int] = initialize()
-
+  private val dim : Array[Int] = dimension.toArray.reverse
+  private val weights: Array[Int] = initialize()
+  
+  //Private methods
   private def initialize() = {
     var cumul = 1
     val tmp: Array[Int] = dim.clone
@@ -36,14 +37,16 @@ class Matrix(dimension: Int*) {
     tmp
   }
 
-  //Private methods
   private def isOk (coor: Int*) : Boolean =  coor.length==dim.length && List.forall2 (coor.toList.reverse,dim.toList) (_<_)
-  //private def toIndex (coor: Int*): Int = (for ((arg, i) <- coor zip (coor.length-1 to (0,-1))) yield arg * dim.slice(0, i).product).sum
- // private def toIndex (coor: Int*): Int = (for ((x,y) <- coor.reverse zip weights) yield x * y).sum
-  private def toIndex (coor: Int*): Int = (for ( i <- (coor.length-1) to (0,-1)) yield coor(i) * weights(i)).sum
-  
-  //Methods
 
+  private def toIndex (coor: Int*): Int = {
+    val l = coor.length-1
+    var sum = 0
+    for ( i <- 0 to l) sum += coor(i) * weights(l - i)
+    sum
+  }
+
+  //Methods
   def initBorder: Unit = for(i <- 0 until mat.length) mat(i) = new BorderPoint
 
   def initBody: Unit = for(i <- 0 until mat.length) mat(i) = new BodyPoint
@@ -52,7 +55,7 @@ class Matrix(dimension: Int*) {
    // require(isOk(coor: _*))
     mat(toIndex(coor:_*))
   }
-
+  
   def setPoint (point: Point, coor: Int*) = {
     //require(isOk(coor: _*))
     mat(toIndex(coor:_*)) = point
@@ -62,15 +65,14 @@ class Matrix(dimension: Int*) {
 
   def axisRange(axis: Int) = dim(axis)
 
-  //def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label/dim.slice(0, arg).product)%dim(arg)))
-  def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label/weights(arg))%dim(arg)))
+  def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label / weights(arg)) % dim(arg)))
 
-
+  // An Inner class in order to explore the matrix created
   class MatIterator () {
 
     //Attributs
-    private var index :Int = 0
-    private var end :Boolean = false
+    private var index: Int = 0
+    private var end: Boolean = false
     
     //Private methods
     private def axisIsOk(axis: Int) = axis >= 0 && axis < dim.length
@@ -128,7 +130,8 @@ class Matrix(dimension: Int*) {
         }
       }
     }
-    
+
+    //this method works only with the axis fixed to its max value (that's what we need for the algorithm)
     def decInvarAxis(axis: Int) = {
       index -= 1
       val lastIndex = dim(axis)-1
@@ -159,7 +162,7 @@ class Matrix(dimension: Int*) {
 
     def isEnd(): Boolean = {
       if(end) {
-       end=false
+       end = false
        true
       }
       else end
@@ -167,22 +170,10 @@ class Matrix(dimension: Int*) {
     
     def getCurrent: Point = mat(index)
 
-    //def getCoordinates = for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg)
-    /*def getCoordinates = {
-      var tmp = dim.product
-     // (index / dim.slice(0, axis).product) % dim(axis)
-     def cpt (x:Int) = {tmp/=x
-                    (index/tmp) %x}
-      dim.map(cpt _)
+    def getCoordinates = for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg)
 
-
-    }*/
-     def getCoordinates = for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg)
-
-
-    def getLabel=index
-    
-    //override def  toString= "(" + (getCoordinates mkString ",") + ")"
+    def getLabel = index
+     
 
   }
 
