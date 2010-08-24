@@ -37,7 +37,6 @@ def passage1(m: Matrix) = {
         if(cpt > 0) {
           point.setDistance(cpt)
           point.addLabel(label)
-          m.setPoint(point, iter.getCoordinates:_*)
           cpt += 1
         }
       }
@@ -66,11 +65,10 @@ def passage2(m: Matrix) = {
        }
        else {
          val distance = point.getDistance
-         if(cpt>0 && (distance>cpt || distance == -1)) {
+         if(cpt > 0 && (distance>cpt || distance == -1)) {
            point.setDistance(cpt)
            //point.clearLabel
            point.addLabel(label)
-           m.setPoint(point, iter.getCoordinates:_*)
            cpt += 1
          }
        }

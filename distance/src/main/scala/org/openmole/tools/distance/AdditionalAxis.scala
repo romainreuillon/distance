@@ -49,7 +49,7 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
          val axisValue = iter.getAxis(i)
          val distance = current.getDistance
 
-          if(iter.getCurrent.getDistance >= 0) {
+          if(current.getDistance >= 0) {
             while(!s.isEmpty && (norme(g.top,s.top,t.top) > norme(distance,axisValue,t.top))) {
               s = s.pop
               t = t.pop
@@ -83,7 +83,6 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
         }
 
      if(!s.isEmpty) {
-      // var point: Point = new BorderPoint
       while(!iter.isEnd()) {
          val axisValue = iter.getAxis(i)
          val point=iter.getCurrent
@@ -91,7 +90,6 @@ private def AdditionalAxisGeneral(m:Matrix, norme:(Int,Int,Int)=>Int,intersect:(
           point.setDistance(norme(g.top, axisValue, s.top))
           //point.clearLabel
           point.addLabel(label.top)
-          m.setPoint(point, iter.getCoordinates:_*)
          }
 
          if(t.top == axisValue) {

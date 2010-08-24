@@ -35,7 +35,6 @@ def preOperations(m: Matrix) = {
         distance = point.getDistance
         if(distance > 0) {
           point.setDistance(distance*distance)
-          m.setPoint(point, iter.getCoordinates:_*)
         }
         iter.incVarAxis(0)
       }
