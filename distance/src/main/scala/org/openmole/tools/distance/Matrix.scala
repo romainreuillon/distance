@@ -17,27 +17,57 @@
 
 package org.openmole.tools.distance
 
-class Matrix(dimension: Int*) {
+import scala.math.{min,max}
 
+object Matrix {
+   
+  
+  def MatrixBody(bodyPoints: Iterable[Array[Int]]): Matrix = {
+    val ret = new Matrix(computeDimensions(bodyPoints))
+    
+    for(p <- bodyPoints) {
+      ret(p) = new BodyPoint
+    }
+    
+    for(i <- 0 until ret.mat.length) {
+      if(ret.mat(i) == null) ret.mat(i) = new BorderPoint
+    }
+    
+    ret 
+  }
+  
+  private def computeDimensions(points: Iterable[Array[Int]]): Array[Int] = {
+    val dim = points.map(_.size).min
+    
+    val dimensions = new Array[Int](dim)
+    
+    for(val i <- 0 until dim) {
+      val minmax = points.map( elt => (elt(i), elt(i))).reduceLeft((x,y) => (min(x._1,y._1), max(x._2,y._2)))
+      dimensions(i) = minmax._2 - minmax._1
+    }
+    
+    dimensions
+  }
+  
+}
+
+
+class Matrix(dimension: Array[Int]) {
+  
   //Attributes
   private val mat : Array[Point] = new Array(dimension.product)
   private val dim : Array[Int] = dimension.toArray.reverse
-  private val weights: Array[Int] = initialize()
-  
-  //Private methods
-  private def initialize() = {
+  private val weights: Array[Int] = {
     var cumul = 1
     val tmp: Array[Int] = dim.clone
     for(i <- 0 until dim.length) {
-
       tmp(i) = cumul
       cumul = cumul * dim(i)
-
     }
     tmp
   }
 
-  private def isOk (coor: Int*) : Boolean =  coor.length==dim.length && List.forall2 (coor.toList.reverse,dim.toList) (_<_)
+  //private def isOk (coor: Int*) : Boolean =  coor.length==dim.length && (coor.toList.reverse, dim.toList).zipped.forall (_<_)
 
   private def toIndex (coor: Int*): Int = {
     val l = coor.length-1
@@ -52,12 +82,14 @@ class Matrix(dimension: Int*) {
   def initBody: Unit = for(i <- 0 until mat.length) mat(i) = new BodyPoint
 
   def apply(coor: Int*) = {
-   // require(isOk(coor: _*))
     mat(toIndex(coor:_*))
   }
   
+  def update(coord: Array[Int], point: Point) = {
+      mat(toIndex(coord:_*)) = point
+  }
+  
   def setPoint (point: Point, coor: Int*) = {
-    //require(isOk(coor: _*))
     mat(toIndex(coor:_*)) = point
   }
 
@@ -68,7 +100,7 @@ class Matrix(dimension: Int*) {
   def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label / weights(arg)) % dim(arg)))
 
   // An Inner class in order to explore the matrix created
-  class MatIterator () {
+  class MatIterator {
 
     //Attributs
     private var index: Int = 0
@@ -79,39 +111,26 @@ class Matrix(dimension: Int*) {
 
     //Methods
     def getAxis(axis: Int) = {
-      //require(axisIsOk(axis))
-     (index / weights(axis)) % dim(axis)
-    }
-    
+      (index / weights(axis)) % dim(axis)
+    }    
      
     def setFirst = index = 0
-
     def setLast = index = mat.length-1
 
     def setFirstAxis(axis: Int) = {
-      //require(axisIsOk(axis))
       index -= weights(axis)* getAxis(axis)
     }
 
-    
-
     def setLastAxis (axis: Int) = {
-      //require(axisIsOk(axis))
-      //if(axis==0) {
-        //index += dim(0) - getAxis(0) - 1
-      //}
-      /*else*/ index += weights(axis)*(dim(axis) -getAxis(axis) - 1)
+      index += weights(axis)*(dim(axis) -getAxis(axis) - 1)
     }
 
     def incVarAxis(axis: Int) = {
-      //require(axisIsOk(axis))
       if(!isAxisLast(axis)) index += weights(axis)
-      else end = true
-                               
+      else end = true                         
     }
 
     def decVarAxis(axis: Int) = {
-      //require(axisIsOk(axis))
       if(!isAxisFirst(axis)) index -= weights(axis)
       else end = true
     }
@@ -125,8 +144,8 @@ class Matrix(dimension: Int*) {
           index=newIndex
         }
         else {
-         index -= 1
-         end = true
+          index -= 1
+          end = true
         }
       }
     }
@@ -146,35 +165,26 @@ class Matrix(dimension: Int*) {
         }
       }
     }
-
-    //def isLast(): Boolean= index== mat.length-1
-    
+   
     def isAxisLast(axis:Int) = {
-      //require(axisIsOk(axis))
       getAxis(axis) == dim(axis) - 1
     }
 
     def isAxisFirst(axis:Int) = {
-     // require(axisIsOk(axis))
       getAxis(axis) == 0
     }
     
-
     def isEnd(): Boolean = {
       if(end) {
-       end = false
-       true
+        end = false
+        true
       }
       else end
     }
     
     def getCurrent: Point = mat(index)
-
     def getCoordinates = for(arg <- dim.length-1 to (0,-1)) yield getAxis(arg)
-
-    def getLabel = index
-     
-
+    def getLabel = index   
   }
 
 }
