@@ -82,15 +82,21 @@ class Matrix(lowerBorns: Array[Int], upperBorns: Array[Int], steps: Array[Int]) 
   def initBody: Unit = for(i <- 0 until mat.length) mat(i) = new BodyPoint
 
   def apply(coor: Int*) = {
-    mat(toIndex(coor:_*))
+    val l = coor.length -1
+    val coord = (for(i <- 0 to l) yield (coor(i) - lowerBorns(l - i)) / steps(l - i))
+    mat(toIndex(coord:_*))
   }
   
   def update(coord: Array[Int], point: Point) = {
-      mat(toIndex(coord:_*)) = point
+      val l = coord.length -1
+      val coor = (for(i <- 0 to l) yield (coord(i) - lowerBorns(l - i)) / steps(l - i))
+      mat(toIndex(coor:_*)) = point
   }
   
   def setPoint (point: Point, coor: Int*) = {
-    mat(toIndex(coor:_*)) = point
+    val l = coor.length -1 
+    val coord = (for(i <- 0 to l) yield (coor(i) - lowerBorns(l - i)) / steps(l - i))
+    mat(toIndex(coord:_*)) = point
   }
 
   def nbDim = dim.length

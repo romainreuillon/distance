@@ -38,9 +38,25 @@ class TestPoint {
   def example = {
 
     
+    // val arg =((for(arg <- Source.fromFile("/home/elbrini/dim").getLines) yield (arg.toInt)).toArray.reverse
+    // 
+    val lower: Array[Int] = Array(0,0,0)
+    val upper = Array(10,10,10)
+    val steps = Array(1,1,1)
+    val m = new Matrix(lower,upper,steps)
+    //val m:Matrix=new Matrix (arg: _*)
+    m.initBorder
+    println(m(0,0,0).getDistance)
+    for(arg<-Source.fromFile("/home/elbrini/coor").getLines) {	
+    //val coor=(for(co<-(arg.split(' '))) yield (co.toInt)).toArray
+    m.setPoint(new BodyPoint, (for(co<-(arg.split('\t'))) yield (co.toInt)).toArray:_*)	
+                                                                                  }
+   val norm = new NormEuc
+   val compute= new AllAxis(norm)
+   compute.computeDistance(m)
+   compute.showResults(m)
 
-
-    def fillSphere(m:Matrix, r: Double, o: Int*) {
+   /* def fillSphere(m:Matrix, r: Double, o: Int*) {
       var i = 0
 
       //require(m.nbDim==o.length)
@@ -61,9 +77,9 @@ class TestPoint {
         iter.incInvarAxis(0)
       }
       println(i)
-    }
+    }*/
 // Attention this function works only with matrix having an even number of values in the first axis
-    def fillCarre(m: Matrix) {
+    /*def fillCarre(m: Matrix) {
  
       val iter= new m.MatIterator
       val iter1=new m.MatIterator
@@ -82,13 +98,13 @@ class TestPoint {
         iter.incInvarAxis(0)
       }
    
-    }
+    }*/
       
-    val lower: Array[Int] = Array(0,0,0,0,0,0)
-    val upper = Array(9,9,9,9,9,9)
-    val steps = Array(1,1,1,1,1,1)
+    /*val lower: Array[Int] = Array(0,0,0)
+    val upper = Array(10,10,10)
+    val steps = Array(1,1,1)*/
     
-    val m = new Matrix(lower,upper,steps)
+   /* val m = new Matrix(lower,upper,steps)
     println("Generating the sphere...")
    val start : Long = System.currentTimeMillis
     fillCarre(m)
@@ -99,7 +115,7 @@ class TestPoint {
     val compute= new AllAxis(norm)
     compute.computeDistance(m)
     val end : Long = System.currentTimeMillis
-    println("Computed in: " + (end - start1)/1000 + " secondes")
+    println("Computed in: " + (end - start1)/1000 + " secondes")*/
     //compute.showResults(m)
     
 
