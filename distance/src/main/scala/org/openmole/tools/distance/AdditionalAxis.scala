@@ -79,7 +79,7 @@ class AdditionalAxis(norm: Norm) extends Computable {
             val axisValue = iter.getAxis(i)
             val point=iter.getCurrent
             if(!point.isBorder) {
-              point.setDistance(norme(g.top, axisValue, s.top))
+              point.setDistance(norme(g.top, axisValue * m.stepAtAxis(i), s.top * m.stepAtAxis(i)))
               //point.clearLabel
               point.addLabel(label.top)
             }

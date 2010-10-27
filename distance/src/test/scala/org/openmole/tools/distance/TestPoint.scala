@@ -62,7 +62,7 @@ class TestPoint {
       }
       println(i)
     }
-
+// Attention this function works only with matrix having an even number of values in the first axis
     def fillCarre(m: Matrix) {
  
       val iter= new m.MatIterator
@@ -84,8 +84,11 @@ class TestPoint {
    
     }
       
-
-    val m = new Matrix(10,10,10,10,10,10)
+    val lower: Array[Int] = Array(0,0,0,0,0,0)
+    val upper = Array(9,9,9,9,9,9)
+    val steps = Array(1,1,1,1,1,1)
+    
+    val m = new Matrix(lower,upper,steps)
     println("Generating the sphere...")
    val start : Long = System.currentTimeMillis
     fillCarre(m)

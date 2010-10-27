@@ -19,7 +19,7 @@ package org.openmole.tools.distance
 
 import scala.math.{min,max}
 
-object Matrix {
+/*object Matrix {
    
   
   def MatrixBody(bodyPoints: Iterable[Array[Int]]): Matrix = {
@@ -49,14 +49,14 @@ object Matrix {
     dimensions
   }
   
-}
+}*/
 
 
-class Matrix(dimension: Array[Int]) {
+class Matrix(lowerBorns: Array[Int], upperBorns: Array[Int], steps: Array[Int]) {
   
   //Attributes
-  private val mat : Array[Point] = new Array(dimension.product)
-  private val dim : Array[Int] = dimension.toArray.reverse
+  private val dim : Array[Int] = (for(i <- 0 until steps.length) yield (upperBorns(i) - lowerBorns(i) )/steps(i) + 1).toArray
+  private val mat : Array[Point] = new Array(dim.product)
   private val weights: Array[Int] = {
     var cumul = 1
     val tmp: Array[Int] = dim.clone
@@ -96,8 +96,10 @@ class Matrix(dimension: Array[Int]) {
   def nbDim = dim.length
 
   def axisRange(axis: Int) = dim(axis)
+  
+  def stepAtAxis(axis: Int) = steps(axis)
 
-  def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label / weights(arg)) % dim(arg)))
+  def labelToCoordinates(label: Int) = (for(arg <- dim.length-1 to (0,-1)) yield ((label / weights(arg)) % dim(arg))* steps(arg) + lowerBorns(arg))
 
   // An Inner class in order to explore the matrix created
   class MatIterator {
