@@ -29,6 +29,7 @@ class AdditionalAxis(norm: Norm) extends Computable {
     for (i <- 1 until m.nbDim)
     {
       val iter = new m.MatIterator
+      val step = m.stepAtAxis(i)
       s = empty
       t = empty
       g = empty
@@ -40,9 +41,8 @@ class AdditionalAxis(norm: Norm) extends Computable {
           val current = iter.getCurrent
           val axisValue = iter.getAxis(i)
           val distance = current.getDistance
-
           if(current.getDistance >= 0) {
-            while(!s.isEmpty && (norme(g.top,s.top,t.top) > norme(distance,axisValue,t.top))) {
+            while(!s.isEmpty && (norme(g.top, s.top*step, t.top*step) > norme(distance, axisValue*step, t.top*step))) {
               s = s.pop
               t = t.pop
               g = g.pop
@@ -53,12 +53,11 @@ class AdditionalAxis(norm: Norm) extends Computable {
               t = t.push(0)
               g = g.push(distance)
               if (current.isBorder)  label=label.push(iter.getLabel)
-              //else label=label.push(iter.getCurrent.getLabels(0))
               else label=label.push(current.getLabel)
             }
             else {
 
-              val w =  intersect(distance,g.top,axisValue,s.top)
+              val w =  intersect(distance, g.top, axisValue*step, s.top*step) / step
               if(w < m.axisRange(i)) {
                 s = s.push(axisValue)
                 t = t.push(w)
@@ -79,7 +78,7 @@ class AdditionalAxis(norm: Norm) extends Computable {
             val axisValue = iter.getAxis(i)
             val point=iter.getCurrent
             if(!point.isBorder) {
-              point.setDistance(norme(g.top, axisValue * m.stepAtAxis(i), s.top * m.stepAtAxis(i)))
+              point.setDistance(norme(g.top, axisValue*step, s.top*step))
               //point.clearLabel
               point.addLabel(label.top)
             }
